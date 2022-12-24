@@ -1,0 +1,26 @@
+services:
+  openlp:
+    build: .
+    volumes:
+      # audio
+      - /etc/alsa:/etc/alsa
+      - /usr/share/alsa:/usr/share/alsa
+      - ~/.config/pulse:/.config/pulse
+      - /run/user/1000/pulse/native:/run/user/1000/pulse/native
+      # video
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /run/dbus/:/run/dbus/
+      - /dev/shm:/dev/shm
+      # files
+      - ./volumes/openlp:/usr/src/openlp
+      - ~/:/home/username
+    ports:
+      - 4316:4316
+      - 4317:4317
+    hostname: /home/username
+    environment:
+      DISPLAY: ${DISPLAY}
+      XAUTHORITY: /root/.Xauthority
+      # QT_DEBUG_PLUGINS: 1
+      PULSE_SERVER: unix:/run/user/1000/pulse/native
+      OPENLP_VERSION: ${OPENLP_VERSION:-master}
